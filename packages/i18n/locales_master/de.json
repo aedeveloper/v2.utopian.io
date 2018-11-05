@@ -6,6 +6,8 @@
   "debug": "Debuggen",
   "GDPR": "GDPR Zustimmung",
   "loginWithGithub": "Mit Github einloggen wäre schön",
+  "i18nTestTitle": "i18n prüfstelle",
+  "i18nTestDescription": "i18n test seite",
   "navbar": {
     "signIn": "Mit github einloggen aber hallo!"
   },

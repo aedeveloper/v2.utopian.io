@@ -1,0 +1,129 @@
+{
+  "ok": false,
+  "vulnerabilities": [
+    {
+      "CVSSv3": "CVSS:3.0/AV:L/AC:L/PR:N/UI:R/S:U/C:N/I:L/A:L",
+      "alternativeIds": [
+        "SNYK-JS-CHOWNR-12184"
+      ],
+      "creationTime": "2018-07-31T16:51:47Z",
+      "credit": [
+        "pravi"
+      ],
+      "cvssScore": 4.4,
+      "description": "## Overview\nAffected versions of [chownr](https://www.npmjs.com/package/chownr) are vulnerable to Time of Check Time of Use (TOCTOU). It does not dereference symbolic links and changes the owner of the link.\n\n## Remediation\nThere is no fix version for `chownr`.\n\n## References\n- [GitHub Issue](https://github.com/isaacs/chownr/issues/14)",
+      "disclosureTime": "2018-07-31T16:51:47Z",
+      "id": "npm:chownr:20180731",
+      "identifiers": {
+        "ALTERNATIVE": [
+          "SNYK-JS-CHOWNR-12184"
+        ],
+        "CVE": [],
+        "CWE": [
+          "CWE-264"
+        ]
+      },
+      "language": "js",
+      "methods": [],
+      "modificationTime": "2018-09-03T13:22:49.047087Z",
+      "moduleName": "chownr",
+      "packageManager": "npm",
+      "packageName": "chownr",
+      "patches": [],
+      "publicationTime": "2018-07-31T13:43:37.776000Z",
+      "references": [
+        {
+          "title": "GitHub Issue",
+          "url": "https://github.com/isaacs/chownr/issues/14"
+        }
+      ],
+      "semver": {
+        "vulnerable": [
+          "*"
+        ]
+      },
+      "severity": "medium",
+      "title": "Time of Check Time of Use (TOCTOU)",
+      "from": [
+        "testing@1.0.0",
+        "chownr@1.1.1"
+      ],
+      "upgradePath": [],
+      "version": "1.1.1",
+      "name": "chownr",
+      "isUpgradable": false,
+      "isPatchable": false,
+      "parentDepType": "extraneous"
+    },
+    {
+      "CVSSv3": "CVSS:3.0/AV:L/AC:L/PR:N/UI:R/S:U/C:N/I:L/A:L",
+      "alternativeIds": [
+        "SNYK-JS-CHOWNR-12184"
+      ],
+      "creationTime": "2018-07-31T16:51:47Z",
+      "credit": [
+        "pravi"
+      ],
+      "cvssScore": 4.4,
+      "description": "## Overview\nAffected versions of [chownr](https://www.npmjs.com/package/chownr) are vulnerable to Time of Check Time of Use (TOCTOU). It does not dereference symbolic links and changes the owner of the link.\n\n## Remediation\nThere is no fix version for `chownr`.\n\n## References\n- [GitHub Issue](https://github.com/isaacs/chownr/issues/14)",
+      "disclosureTime": "2018-07-31T16:51:47Z",
+      "id": "npm:chownr:20180731",
+      "identifiers": {
+        "ALTERNATIVE": [
+          "SNYK-JS-CHOWNR-12184"
+        ],
+        "CVE": [],
+        "CWE": [
+          "CWE-264"
+        ]
+      },
+      "language": "js",
+      "methods": [],
+      "modificationTime": "2018-09-03T13:22:49.047087Z",
+      "moduleName": "chownr",
+      "packageManager": "npm",
+      "packageName": "chownr",
+      "patches": [],
+      "publicationTime": "2018-07-31T13:43:37.776000Z",
+      "references": [
+        {
+          "title": "GitHub Issue",
+          "url": "https://github.com/isaacs/chownr/issues/14"
+        }
+      ],
+      "semver": {
+        "vulnerable": [
+          "*"
+        ]
+      },
+      "severity": "medium",
+      "title": "Time of Check Time of Use (TOCTOU)",
+      "from": [
+        "testing@1.0.0",
+        "node-pre-gyp@0.10.3",
+        "tar@4.4.6",
+        "chownr@1.1.1"
+      ],
+      "upgradePath": [],
+      "version": "1.1.1",
+      "name": "chownr",
+      "isUpgradable": false,
+      "isPatchable": false,
+      "parentDepType": "extraneous"
+    }
+  ],
+  "dependencyCount": 182,
+  "org": "nothingismagick",
+  "licensesPolicy": null,
+  "isPrivate": true,
+  "packageManager": "npm",
+  "policy": "# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.\nversion: v1.12.0\nignore: {}\npatch: {}\n",
+  "ignoreSettings": null,
+  "summary": "2 vulnerable dependency paths",
+  "filesystemPolicy": false,
+  "filtered": {
+    "ignore": [],
+    "patch": []
+  },
+  "uniqueCount": 1
+}

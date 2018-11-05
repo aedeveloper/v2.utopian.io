@@ -1,22 +1,27 @@
 {
-  "name": "@utopian/i18n",
+  "name": "testing",
   "version": "1.0.0",
-  "description": "Internationalisation strings and template files for utopian.io",
+  "description": "Common package for running a barrage of tests for Quasar apps",
   "keywords": [
-    "i18n",
-    "locales",
-    "translations"
+    "jest",
+    "webdriver",
+    "cypress",
+    "lighthouse",
+    "snyk",
+    "unit test",
+    "e2e test"
   ],
   "author": "Utopian Company SRLs",
   "homepage": "https://utopian.io",
   "license": "GPL-3.0",
-  "main": "lib/i18n.js",
+  "main": "lib/testing.js",
   "directories": {
     "lib": "lib",
     "test": "__tests__"
   },
   "files": [
-    "lib"
+    "lib/testing.js",
+    "lib/quasar-test.js"
   ],
   "publishConfig": {
     "registry": "http://registry.npmjs.org/"
@@ -28,18 +33,18 @@
   "scripts": {
     "lint": "eslint --ext .js,.vue src",
     "lint:fix": "eslint --ext .js,.vue lib --fix",
-    "test:unit": "jest",
-    "test:cover": "jest --coverage",
-    "test:cover:open": "quasar serve test/coverage/lcov-report/ --cache 0 --port 8788 --open",
+    "test": "jest --coverage",
+    "test:jest": "jest --coverage",
+    "test:snyk": "snyk test --json > ./test/snyk/snyk_results.json",
+    "test:lighthouse": "lighthouse http://localhost:8080",
+    "test:webdriver:phantomjs": "webdriver --config ./test/webdriver/wdio.phantomjs.conf.js",
+    "test:cypress:dev": "cypress open",
+    "test:cypress:e2e": "cypress run",
     "coverage:serve": "quasar serve ./__tests__/coverage/lcov-report",
     "precommit": "lint-staged"
   },
   "bugs": {
     "url": "https://github.com/utopian-io/v2.utopian.io/issues"
-  },
-  "private": true,
-  "engines": {
-    "node": ">= 10.0.0"
   },
   "devDependencies": {
     "@types/jest": "^23.3.2",
@@ -64,15 +69,18 @@
     "fs-filesystem": "^2.1.2",
     "jest": "^23.6.0",
     "jest-serializer-vue": "^2.0.2",
+    "lighthouse": "^3.2.1",
     "lint-staged": "^7.2.2",
     "minimist": "^1.2.0",
     "promise": "^8.0.2",
     "quasar-cli": "^0.17.20",
-    "strip-ansi": "=3.0.1",
+    "ramda": "^0.25.0",
+    "snyk": "^1.106.1",
     "vue-jest": "^2.6.0",
-    "watchpack": "^1.6.0"
-  },
-  "dependencies": {
-    "ramda": "^0.25.0"
+    "vue-test-helpers": "^2.0.0",
+    "watchpack": "^1.6.0",
+    "wdio-phantomjs-service": "~0.1",
+    "wdio-selenium-standalone-service": "^5.0.0-beta.3",
+    "wdio-testingbot-service": "^0.2.1"
   }
 }

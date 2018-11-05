@@ -6,6 +6,8 @@
   "interaction": "Interaction",
   "debug": "Debug",
   "GDPR": "GDPR Acceptance",
+  "i18nTestTitle": "i18n test",
+  "i18nTestDescription": "i18n test page",
   "fileUpload": {
     "error": {
       "unexpected": "An error occurred while uploading your file."

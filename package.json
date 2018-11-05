@@ -1,7 +1,7 @@
 {
   "name": "@utopian/root",
   "private": true,
-  "license" : "GPL-3.0",
+  "license": "GPL-3.0",
   "author": "Utopian Company SRLs",
   "homepage": "https://utopian.io",
   "repository": {
