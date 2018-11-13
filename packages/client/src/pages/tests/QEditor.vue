@@ -1,5 +1,4 @@
 <template lang="pug">
-  // q-layout(view="hHh LpR fff")
   div
     .row.gutter-sm.project-form-container
       .col-md-8.col-sm-12.col-xs-12

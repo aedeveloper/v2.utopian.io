@@ -21,6 +21,11 @@
       "save": "Publish my article"
     }
   },
+  "editor": {
+    "uploadImage": "Choose an image file to upload",
+    "findUsername": "Search for a username to reference",
+    "noUsersFound": "No users found with that name"
+  },
   "fileUpload": {
     "error": {
       "unexpected": "An error occurred while uploading your file."

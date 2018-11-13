@@ -1,5 +1,6 @@
 <script>
 import QNoSsr from 'quasar-framework/src/components/no-ssr/QNoSsr'
+import QField from 'quasar-framework/src/components/field/QField'
 
 // todo: map to quasar internals
 // import { Caret } from 'quasar-framework/src/components/editor/editor-caret'
@@ -8,7 +9,7 @@ import QNoSsr from 'quasar-framework/src/components/no-ssr/QNoSsr'
 
 export default {
   name: 'u-wysiwyg',
-  components: {QNoSsr},
+  components: {QField, QNoSsr},
   props: ['value', 'onChange', 'field'],
   mounted () {
     /*
@@ -257,11 +258,11 @@ export default {
      *  create the input position (for DOM rendering)
      *
      *  @param {number} offset - offset to the right in pixels
-     *
+     *  @param {number} offset - offset to the right in pixels
+     *  @author Daniel Thompson-Yvetot
      */
     craftInput (offset) {
       // this.$refs.editor.focus()
-
       this.userInputPos.pos = this.getRangePolyfill()
       let child = this.getCaretTopPoint()
       const parent = document.getElementById('CE').getBoundingClientRect()
@@ -274,7 +275,7 @@ export default {
       }
       this.userInputPosRendered = `position:absolute;width:250px;top:${relativePos.top}px;left:${relativePos.left}px`
       this.keycode = null // cleanup
-      document.execCommand('delete', false, null)
+      if (!offset) document.execCommand('delete')
     },
 
     /**
@@ -385,6 +386,16 @@ export default {
     },
     uploadFails () {
       // this.setAppError('fileUpload.error.unexpected')
+    },
+
+    /**
+     * Create markdown / render markdown
+     *
+     * @author Daniel Thompson-Yvetot
+     */
+    makeMarkdown () {
+      this.markdownMD = this.$turndown.turndown(this.wysiwyg)
+      this.markdownHTML = this.$marked(this.markdownMD)
     }
   },
   data () {
@@ -394,6 +405,7 @@ export default {
         left: 0,
         pos: 0
       },
+      wysiwyg: '',
       errorLog: [],
       browser: 'init',
       userInputPosRendered: false,
@@ -405,10 +417,12 @@ export default {
       findUser: false,
       users: {}, // results array for @mention
       fullScreen: false,
+      markdownMD: '',
+      markdownHTML: '',
       definitions: {
         getUser: {
-          handler: () => this.craftInput(), // () => { this.userInputPosRendered = true },
-          icon: 'far fa-user',
+          handler: () => this.craftInput(15), // () => { this.userInputPosRendered = true },
+          icon: 'fas fa-at',
           tip: this.$t('editor.findUsername')
         },
         upload: {
@@ -419,7 +433,7 @@ export default {
       },
       toolbar: [
         ['fullscreen'],
-        ['link', 'upload'], // , 'getUser' => save it for a rainy day
+        ['link', 'upload', () => { if (this.wysiwyg) return 'getUser' }], // , 'getUser' => save it for a rainy day
         [
           {
             icon: this.$q.icon.editor.removeFormat,
@@ -431,17 +445,11 @@ export default {
             options: ['bold', 'italic', 'strike', 'underline', 'removeFormat']
           },
           {
-            icon: this.$q.icon.editor.fontSize,
-            fixedLabel: true,
-            fixedIcon: false,
-            list: 'no-icons',
-            options: ['size-1', 'size-2', 'size-3', 'size-4', 'size-5', 'size-6']
-          },
-          {
             icon: this.$q.icon.editor.formatting,
             fixedLabel: true,
             fixedIcon: false,
-            options: ['p', 'code']
+            list: 'no-icons',
+            options: ['p', 'code', 'h3']
           }
         ],
         [
@@ -463,98 +471,140 @@ export default {
   }
 }
 </script>
-<template>
-  <div>
-    <form id="CE" autocorrect="off" autocapitalize="off" autocomplete="off">
-      <q-editor
-        ref="editor"
-        @keyup.native="detectAt()"
-        @fullscreen="fullscreen"
-        @input="handleChange"
-        :value="value"
-        :field="field"
-        :toolbar="toolbar"
-        :definitions="definitions"
-        :content-style="{ fontFamily: 'Noto Sans' }"
-      >
-      </q-editor>
-      <q-input
-        v-if="userInputPosRendered"
-        v-model="terms"
-        maxlength="32"
-        class="findUser"
-        placeholder="Search for a user"
-        autofocus
-        :class="[ fullScreen ? 'superZ': 'normalZ' ]"
-        :style="userInputPosRendered"
-        ref="userSearch"
-        color="amber"
-        @input="val => partialCleaner(val)"
-        @blur="clearFindUser()"
-        @keyup.escape="clearFindUser('clear')"
-        :after="[
-        {
-          icon: 'close',
-          handler () {
-            clearFindUser('clear')
-          }
-        }
-      ]"
-      >
-        <q-autocomplete
-          @search="search"
-          :debounce="200"
-          :min-characters="2"
-          :max-results="10"
-          @selected="pasteUserToPos"
-          dense
-        ></q-autocomplete>
-      </q-input>
-    </form>
+<template lang="pug">
+  div
+    q-tabs.tabs(
+      animated
+      swipeable
+      no-pane-border
+      align="right"
+      position="top"
+    )
+      q-tab(default slot="title" name="html" icon="fab fa-html5")
+      q-tab(slot="title" name="code" icon="fas fa-code")
+      q-tab(slot="title" name="markdown" icon="fab fa-markdown" @select="makeMarkdown()")
+      q-tab-pane(name="html")
+        form(id="CE" autocorrect="off" autocapitalize="off" autocomplete="off")
+          q-editor(
+            ref="editor"
+            @keyup.native="detectAt()"
+            @fullscreen="fullscreen"
+            @input="handleChange"
+            v-model="wysiwyg"
+            :value="value"
+            :field="field"
+            :toolbar="toolbar"
+            :definitions="definitions"
+            :content-style="{ fontFamily: 'Noto Sans' }"
+          )
+          q-input(
+            v-if="userInputPosRendered"
+            v-model="terms"
+            maxlength="32"
+            class="findUser"
+            placeholder="Search for a user"
+            autofocus
+            :class="[ fullScreen ? 'superZ': 'normalZ' ]"
+            :style="userInputPosRendered"
+            ref="userSearch"
+            color="amber"
+            @input="val => partialCleaner(val)"
+            @blur="clearFindUser()"
+            @keyup.escape="clearFindUser('clear')"
+            :after="[{icon: 'close', handler () {clearFindUser('clear')}}]"
+          )
+            q-autocomplete(
+              @search="search"
+              :debounce="200"
+              :min-characters="2"
+              :max-results="10"
+              @selected="pasteUserToPos"
+              dense
+            )
+      q-tab-pane(name="markdown")
+        .row
+          .col-6
+            p Markdown
+            p {{ markdownMD }}
+          .col-6
+            p Rendered
+            p(v-html="markdownHTML")
+      q-tab-pane(name="code")
+        q-field
+          q-input(
+            class="pre"
+            type="textarea"
+            rows="10"
+            v-model="wysiwyg"
+            text-color="black"
+          )
 
-    <div class="fullScreen" v-if="fullScreen">
-      <img src="~assets/img/logo-icon.svg" />
-    </div>
-    <q-no-ssr>
-      <q-scroll-observable @scroll="userHasScrolled"></q-scroll-observable>
-      <!--<q-window-resize-observable v-if="!$q.platform.is.android" @resize="detectAt"></q-window-resize-observable>-->
-    </q-no-ssr>
-  </div>
+    .fullScreen(v-if="fullScreen")
+      img(src="~assets/img/logo-icon.svg")
+    q-no-ssr
+      q-scroll-observable(@scroll="userHasScrolled")
+      // q-window-resize-observable(v-if="!$q.platform.is.android" @resize="detectAt")
 </template>
-<style>
+<style lang="stylus">
+  @import "~variables"
+
   .findUser {
-    height: 26px;
-    font-family: 'Noto Sans';
-    outline-color: transparent!important;
-    padding-left: 2px!important;
-    border-color: transparent!important;
+    height 26px
+    font-family 'Noto Sans'
+    outline-color transparent!important
+    padding-left 2px!important
+    border-color transparent!important
   }
   .superZ {
-    z-index: 6001;
+    z-index 6001
   }
   .normalZ {
-    z-index: 1000;
+    z-index 1000
   }
   .fullScreen {
-    position: absolute;
-    top: 5px;
-    right: 10px;
-    z-index: 10000;
-    opacity: 0.3;
+    position absolute
+    top 5px
+    right 10px
+    z-index 10000
+    opacity 0.3
   }
   .q-if-addon-left {
-    margin: 5px 0 0 -2px;
+    margin 5px 0 0 -2px
   }
-  a.mention-link, a.mention-link:visited,a.mention-link:hover {
-    color: #E9DC51!important;
-    text-decoration-line: none!important;
+  a.mention-link, a.mention-link:visited, a.mention-link:hover {
+    color #E9DC51!important
+    text-decoration-line: none!important
   }
-  .q-editor-content *::selection {
-    background-color:rgba(255, 255, 100, 0.7)!important;
-    color:#032764!important;
+  .q-editor-content::selection, .q-editor-content *::selection  {
+    background-color rgba(255, 255, 100, 0.7)
+    color #032764
   }
   .q-popover {
-    transform: translate3d(0,0,0);
+    transform translate3d(0,0,0)
   }
-
+  .q-tabs-bar {
+    border-top-width 5px!important
+    height 5px!important
+    bottom revert
+    top 0
+  }
+  .q-tab {
+  }
+  .q-tab.active .q-tab-icon-parent {
+    margin-top 5px
+  }
+  .tabs {
+    border-radius 3px 3px 0 0
+    min-height 300px!important
+  }
+  pre, .pre .q-input-target {
+    white-space pre-wrap
+    display block
+    unicode-bidi embed
+    font-family monospace!important
+    color: black!important
+  }
+  .q-tab-pane, .q-tabs {
+    background-color $primary
+  }
 </style>

@@ -7,7 +7,11 @@
   "GDPR": "GDPR Zustimmung",
   "loginWithGithub": "Mit Github einloggen wäre schön",
   "navbar": {
-    "signIn": "Mit github einloggen aber hallo!"
+    "contribute": "Beitragen",
+    "linkSteemAccount": "Link your Steem account",
+    "logOut": "Log out",
+    "settings": "Settings",
+    "signIn": "sign in"
   },
   "common": {
     "signIn": "Mit Github einloggen",
